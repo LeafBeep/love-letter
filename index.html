@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You 💌</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+    color: #333;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+
+  h1 {
+    font-size: clamp(1.4em, 4vw, 2em);
+    color: #d63384;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+
+  /* Envelope container */
+  .envelope {
+    position: relative;
+    width: clamp(160px, 45vw, 220px);
+    height: clamp(100px, 28vw, 150px);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(255, 105, 180, 0.4);
+    cursor: pointer;
+    perspective: 1000px;
+    transition: transform 0.3s ease;
+  }
+
+  .envelope:active {
+    transform: scale(1.03);
+  }
+
+  /* Envelope flap */
+  .flap {
+    position: absolute;
+    top: 0;
+    left: 3%;
+    width: 94%;
+    height: 100%;
+    background: #ff6fa5;
+    clip-path: polygon(0 0, 100% 0, 50% 55%);
+    transform-origin: top;
+    transition: transform 0.6s ease;
+    z-index: 2;
+  }
+
+  /* Message inside */
+  .message {
+    position: absolute;
+    top: 12%;
+    left: 8%;
+    width: 84%;
+    height: 76%;
+    background: #fff;
+    border-radius: 8px;
+    padding: 5%;
+    box-sizing: border-box;
+    font-size: clamp(0.9em, 2.8vw, 1.1em);
+    line-height: 1.4;
+    color: #444;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    z-index: 1;
+    text-align: center;
+  }
+
+  .opened .flap {
+    transform: rotateX(180deg);
+  }
+
+  .opened .message {
+    opacity: 1;
+  }
+
+  /* Hearts animation */
+  .hearts {
+    position: absolute;
+    bottom: 50px;
+    left: 30%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .heart {
+    position: absolute;
+    color: #ff6fa5;
+    font-size: clamp(18px, 4vw, 26px);
+    animation: float linear forwards;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-600px) scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  /* Responsive tweaks for very small screens */
+  @media (max-height: 600px) {
+    body {
+      justify-content: flex-start;
+      padding-top: 40px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <h1>💖 Tap the letter 💖</h1>
+
+  <div class="envelope" onclick="openLetter()">
+    <div class="flap"></div>
+    <div class="message" id="message-box">You make every day brighter 🌞</div>
+  </div>
+
+  <div class="hearts" id="hearts"></div>
+
+<script>
+const messages = [
+  "You make every day brighter 🌞",
+  "I still get butterflies when I see you 🦋",
+  "You’re my favorite person in the world 💕",
+  "Every love song reminds me of you 🎶",
+  "If I could, I’d pause time whenever I’m with you ⏳",
+  "You’re the best thing that ever happened to me 💖",
+  "I love your smile — it’s literally magic ✨",
+  "You're my home, no matter where we are 🏡",
+  "You make my heart do a happy dance 💃",
+  "Every day with you is my new favorite day 💘"
+];
+
+let opened = false;
+
+function openLetter() {
+  const envelope = document.querySelector('.envelope');
+  const messageBox = document.getElementById('message-box');
+
+  if (!opened) {
+    envelope.classList.add('opened');
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    messageBox.textContent = randomMessage;
+    messageBox.style.opacity = 1;
+    createHearts();
+    opened = true;
+  } else {
+    envelope.classList.remove('opened');
+    messageBox.style.opacity = 0;
+    opened = false;
+  }
+}
+
+function createHearts() {
+  const heartsContainer = document.getElementById('hearts');
+  for (let i = 0; i < 10; i++) {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.style.left = Math.random() * 150 + 'px'; // keeps them near center-left
+    const duration = Math.random() * 2 + 4;
+    heart.style.animationDuration = duration + 's';
+    heart.innerHTML = '❤️';
+    heart.style.animationName = 'float';
+    heartsContainer.appendChild(heart);
+    setTimeout(() => heart.remove(), duration * 1000 + 500);
+  }
+}
+</script>
+
+</body>
+</html>
